@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import chalk from 'chalk';
 import dns from 'node:dns'
 import { connectDB } from './config/db.js';
+import authorRoutes  from './routes/authorRoutes.js'
 
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 dotenv.config();
@@ -12,6 +13,10 @@ const app = express();
 app.use(express.json())
 
 // For Routes
+app.use("/authors", authorRoutes);
+app.use("/students", studentRoutes);
+
+
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {

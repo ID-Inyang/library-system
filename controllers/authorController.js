@@ -4,11 +4,21 @@ export const createAuthor = async (req, res) => {
     try {
         const { name, bio } = req.body
     
+        if (!name) {
+            return res.status(400).json("Invalid Data!")
+        }
+
         const newAuthor = await Author.create({ name, bio })
 
         res.status(201).json( newAuthor );
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        if (error.code === 11000) {  // Mongo duplicate
+            return res.status(409).json({ error: 'Author exists' });
+        }
+        res.status(500).json({
+            message: "Error",
+            data: error.message
+        })
     }
 }
 
@@ -19,7 +29,10 @@ export const getAuthors = async (req, res) => {
 
         res.status(200).json( authors );
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({
+            message: "Error",
+            data: error.message
+        })
     }
 }
 
@@ -34,7 +47,10 @@ export const getAuthor = async (req, res) => {
         res.status(200).json( author );
 
     } catch (error) {
-        res.status(404).json({ message: error.message })
+        res.status(500).json({
+            message: "Error",
+            data: error.message
+        })
     }
 }
 
@@ -45,8 +61,24 @@ export const updateAuthor = async (req, res) => {
 
         const requestBody = req.body;
 
-        if (!requestBody) {
-            return res.status(404).json("Not found")
+        const isEmpty = (obj) => obj && obj.constructor === Object && Object.keys(obj).length === 0;
+
+        if (isEmpty(requestBody)) {
+            return res.status(400).json("Not found")
+        }
+
+        function hasUndefinedValue(obj) {
+            for (const [key, value] of Object.entries(obj)) {
+                if (value === undefined) {
+                console.log(`Key '${key}' is missing a value`);
+                return true;
+                }
+            }
+            return false;
+        }
+
+        if (hasUndefinedValue(requestBody)) {
+            return res.status(400).json("Data missing");
         }
 
         const updateAuthor = await Author.findByIdAndUpdate(id, requestBody, { new: true })
@@ -57,7 +89,10 @@ export const updateAuthor = async (req, res) => {
 
         res.status(200).json( updateAuthor );
     } catch (error) {
-        res.status(404).json({ message: error.message })
+        res.status(500).json({
+            message: "Error",
+            data: error.message
+        })
     }
 }
 
@@ -68,8 +103,15 @@ export const deleteAuthor = async (req, res) => {
 
         const deleteAuthor = await Author.findByIdAndDelete(id)
 
-        res.status(204).end()
+        if(!deleteAuthor) {
+            return res.status(404).json("Author not found")
+        }
+
+        res.status(204).send()
     } catch (error) {
-        res.status(404).json({ message: error.message })
+        res.status(500).json({
+            message: "Error",
+            data: error.message
+        })
     }
 }
