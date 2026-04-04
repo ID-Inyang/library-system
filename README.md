@@ -44,46 +44,55 @@ pnpm install
 pnpm dev
 ```
 
+## Environment Variables
+Create a .env file in the root directory with the following:
+MONGO_URI=your_mongodb_connection_string
+PORT=5000
 ---
 
 ## API Endpoints
 
 ### Books
 
-* POST /api/books → Create book
-* GET /api/books → Get all books
-* GET /api/books/:id → Get single book
-* PUT /api/books/:id → Update book
-* DELETE /api/books/:id → Delete book
-* POST /api/books/:id/borrow → Borrow book
-* POST /api/books/:id/return → Return book
+* POST /books → Create book
+* GET /books → Get all books
+* GET /books/:id → Get single book
+* PUT /books/:id → Update book
+* DELETE /books/:id → Delete book
+* POST /books/:id/borrow → Borrow book
+* POST /books/:id/return → Return book
 
 ---
 
 ### Authors
 
-* POST /api/authors
-* GET /api/authors
-* GET /api/authors/:id
-* PUT /api/authors/:id
-* DELETE /api/authors/:id
+* POST /authors
+* GET /authors
+* GET /authors/:id
+* PUT /authors/:id
+* DELETE /authors/:id
 
 ---
 
 ### Students
 
-* POST /api/students
-* GET /api/students
-* GET /api/students/:id
+* POST /students
+* GET /students
+* GET /students/:id
 
 ---
 
 ###  Library Attendant
 
-* POST /api/attendant
-* GET /api/attendant
+* POST /attendants
+* GET /attendants
 
 ---
+
+## Prerequisites
+* Node.js
+* MongoDB
+
 
 ## Notes
 
