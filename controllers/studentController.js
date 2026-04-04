@@ -1,8 +1,8 @@
-import Student from "../models/Student";
+import Student from "../models/Student.js";
 
 export const createStudent = async (req, res) => {
     try {
-       const { name, email, studentId,  } = req.body
+       const { name, email, studentId } = req.body
 
         if (!name || !email || !studentId)
         {
@@ -29,7 +29,10 @@ export const getAllStudents = async (req, res) => {
         res.status(200).json( students );
 
     } catch (error) {
-        res.status(404).json({ error: "Not found" })
+        res.status(500).json({
+            message: "Error",
+            data: error.message
+        })
     }
 }
 
